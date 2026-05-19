@@ -1,0 +1,29 @@
+[
+  {
+    "name": "JavaScript",
+    "category": "Language",
+    "level": "intermediate",
+    "description": "프로젝트 경험에 맞춰 설명을 수정하세요.",
+    "relatedProjectIds": [],
+    "isPublic": true,
+    "sortOrder": 1
+  },
+  {
+    "name": "React",
+    "category": "Frontend",
+    "level": "intermediate",
+    "description": "컴포넌트 기반 UI 개발 경험을 입력하세요.",
+    "relatedProjectIds": [],
+    "isPublic": true,
+    "sortOrder": 2
+  },
+  {
+    "name": "Next.js",
+    "category": "Frontend",
+    "level": "intermediate",
+    "description": "포트폴리오 공개 사이트의 기반 기술입니다.",
+    "relatedProjectIds": [],
+    "isPublic": true,
+    "sortOrder": 3
+  }
+]

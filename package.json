@@ -1,0 +1,17 @@
+{
+  "name": "skk-portfolio",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:portfolio": "npm run dev -w apps/portfolio",
+    "dev:admin": "npm run dev -w apps/admin",
+    "build:portfolio": "npm run build -w apps/portfolio",
+    "build:admin": "npm run build -w apps/admin",
+    "typecheck": "npm run typecheck -w packages/content-schema && npm run typecheck -w apps/portfolio && npm run typecheck -w apps/admin",
+    "lint": "npm run lint -w apps/portfolio"
+  }
+}

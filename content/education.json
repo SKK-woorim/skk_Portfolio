@@ -1,0 +1,12 @@
+[
+  {
+    "school": "학교명을 입력하세요",
+    "major": "전공을 입력하세요",
+    "degree": "",
+    "startDate": "",
+    "endDate": "",
+    "description": "학력 상세 내용을 입력하세요.",
+    "isPublic": true,
+    "sortOrder": 1
+  }
+]

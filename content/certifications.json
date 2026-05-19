@@ -1,0 +1,11 @@
+[
+  {
+    "title": "자격증명을 입력하세요",
+    "issuer": "발급 기관",
+    "issuedAt": "",
+    "expiresAt": "",
+    "credentialUrl": "",
+    "isPublic": false,
+    "sortOrder": 1
+  }
+]

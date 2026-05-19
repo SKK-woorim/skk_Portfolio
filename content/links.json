@@ -1,0 +1,16 @@
+[
+  {
+    "label": "GitHub",
+    "url": "",
+    "type": "github",
+    "isPublic": false,
+    "sortOrder": 1
+  },
+  {
+    "label": "Blog",
+    "url": "",
+    "type": "blog",
+    "isPublic": false,
+    "sortOrder": 2
+  }
+]

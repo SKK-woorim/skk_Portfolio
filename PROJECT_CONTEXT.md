@@ -13,41 +13,53 @@
 현재 방향:
 
 - 공개 포트폴리오: Next.js
-- 로컬 관리자 앱: 추후 결정. Vite + React 또는 Next.js 검토
+- 로컬 관리자 앱: Vite + React
 - 데이터 저장: JSON + Markdown 파일
 - 게시글 작성: Markdown
-- 스타일링: Tailwind CSS, CSS Modules, plain CSS
+- 스타일링: plain CSS
 - 배포: Netlify에는 공개 포트폴리오만 배포
 
 ## 3. How to Run
 
-아직 실행 가능한 앱이 없다. 구현 스택 확정 후 갱신한다.
+```bash
+npm install
+npm run dev:portfolio
+npm run dev:admin
+```
+
+- 공개 포트폴리오: `http://localhost:3000`
+- 로컬 관리자 앱: `http://127.0.0.1:5174`
 
 ## 4. Important Files
 
 - `README.md`: 프로젝트 개요와 실행 정보
 - `docs/PLANNING.md`: 포트폴리오 기획 문서
 - `PROJECT_CONTEXT.md`: AI 협업 및 인수인계용 현재 맥락
+- `apps/portfolio`: Next.js 공개 포트폴리오
+- `apps/admin`: Vite + React 로컬 관리자 앱
+- `content`: JSON/Markdown 콘텐츠 원본
+- `packages/content-schema`: 공유 타입과 공개 필터 유틸
+- `netlify.toml`: Netlify 공개 사이트 배포 설정
 
 ## 5. Recent Changes
 
 - 2026-05-19: 프로젝트 폴더 생성 및 기획 단계 문서 시작.
 - 2026-05-19: 사용자 요구사항 반영. 이름은 송경근. 콘텐츠를 한곳에서 관리하고, 소유자 전용 개발자 페이지에서 개인정보 및 이력 정보 수정, 프로젝트/수상 상세 게시글 작성이 가능해야 함.
 - 2026-05-19: 공개 사이트는 Next.js, Netlify 배포로 확정. 관리자 페이지는 로컬 전용으로 운영하고, 데이터는 JSON/Markdown 파일 기반으로 관리하는 방향 확정.
+- 2026-05-19: `apps/portfolio`, `apps/admin`, `content`, `packages/content-schema` 초기 구현. 공개 사이트와 로컬 관리자 앱 빌드 통과.
 
 ## 6. Current Task
 
-관리형 개발자 포트폴리오 앱으로 기획을 확장한다. 공개 포트폴리오와 로컬 전용 개발자 페이지, 콘텐츠 파일 구조, Markdown 작성 흐름을 정리한다.
+초기 앱 골격 구현 완료. 다음 작업은 실제 콘텐츠 입력, UI polish, 관리자 편집 UX 개선이다.
 
 ## 7. Next Steps
 
-- 로컬 관리자 앱 기술 선택
-- monorepo 또는 단일 Next.js 프로젝트 구조 선택
-- 콘텐츠 파일 구조 확정
 - 실제 프로필 정보 수집
 - 포트폴리오 톤과 목표 독자 확정
 - 주요 화면 와이어프레임 작성
-- 구현 단계 진입
+- 관리자 앱을 JSON textarea 중심에서 폼 기반 편집 UX로 개선
+- 프로젝트/수상 Markdown 미리보기 추가
+- Netlify 연결 및 배포 검증
 
 ## 8. Cautions
 
@@ -58,6 +70,7 @@
 - 공개 페이지는 `isPublic` 기준으로만 데이터를 노출해야 한다.
 - 공개 저장소에 올릴 수 없는 개인정보는 `content/`에 넣지 않는다.
 - 개인 프로젝트이지만 Git 기록을 유지한다.
+- `npm audit --omit=dev`에서 Next.js 하위 `postcss` moderate 경고 2건이 남아 있다. `npm audit fix`는 변경을 만들지 못했고, 강제 수정은 부적절한 Next.js 다운그레이드를 유도한다.
 
 ## 9. AI Handoff Notes
 
@@ -66,3 +79,5 @@
 추가 요구사항: 이름은 송경근. 개인정보, 학력, 수상 내역, 자격증, 링크는 추후 쉽게 수정할 수 있도록 한곳에서 관리해야 한다. 프로젝트와 수상 내역은 Markdown 상세 본문이 필요하며, 소유자만 로컬에서 실행하는 개발자 페이지에서 게시글 생성/수정 및 개인정보 수정을 할 수 있어야 한다.
 
 확정 사항: 공개 사이트는 Next.js로 만들고 Netlify에 배포한다. 관리자 페이지는 배포하지 않고 로컬에서만 실행한다. 데이터는 JSON/Markdown 파일 기반으로 관리한다.
+
+구현 상태: 공개 사이트는 `apps/portfolio`, 로컬 관리자 앱은 `apps/admin`에 있다. 관리자 앱은 Vite dev server middleware로 `content/` 파일을 읽고 쓴다. 공개 사이트는 정적 export로 `apps/portfolio/out`을 생성한다.
