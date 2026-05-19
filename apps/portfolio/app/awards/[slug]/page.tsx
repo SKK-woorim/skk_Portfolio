@@ -11,8 +11,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function AwardDetailPage({ params }: { params: { slug: string } }) {
-  const award = getPublicAward(params.slug);
+export default async function AwardDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const award = getPublicAward(slug);
 
   if (!award) {
     notFound();
