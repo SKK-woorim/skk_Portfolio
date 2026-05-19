@@ -13,8 +13,6 @@ type HomeExperienceProps = {
   content: PortfolioContent;
 };
 
-const projectImageSeeds = ['workspace-interface', 'code-architecture', 'product-system', 'digital-craft'];
-
 export function HomeExperience({ content }: HomeExperienceProps) {
   const rootRef = useRef<HTMLElement>(null);
   const featuredProjects = content.projects.filter((project) => project.isFeatured);
@@ -32,26 +30,26 @@ export function HomeExperience({ content }: HomeExperienceProps) {
 
       const ctx = gsap.context(() => {
         gsap.from('.hero-word', {
-          y: 72,
+          y: 22,
           opacity: 0,
-          duration: 1.1,
+          duration: 0.7,
           ease: 'power4.out',
           stagger: 0.08
         });
 
         gsap.from('.hero-media', {
-          y: 56,
-          scale: 0.92,
+          y: 18,
+          scale: 0.98,
           opacity: 0,
-          duration: 1.2,
+          duration: 0.7,
           delay: 0.2,
-          ease: 'power3.out'
+          ease: 'power2.out'
         });
 
         gsap.utils.toArray<HTMLElement>('.reveal-copy').forEach((element) => {
           gsap.fromTo(
             element,
-            { opacity: 0.18, y: 36 },
+            { opacity: 0.64, y: 18 },
             {
               opacity: 1,
               y: 0,
@@ -69,11 +67,10 @@ export function HomeExperience({ content }: HomeExperienceProps) {
         gsap.utils.toArray<HTMLElement>('.motion-media').forEach((element) => {
           gsap.fromTo(
             element,
-            { scale: 0.86, opacity: 0.42, filter: 'contrast(1.25) grayscale(1)' },
+            { scale: 0.98, opacity: 0.74 },
             {
               scale: 1,
               opacity: 1,
-              filter: 'contrast(1.08) grayscale(0.18)',
               ease: 'none',
               scrollTrigger: {
                 trigger: element,
@@ -110,9 +107,6 @@ export function HomeExperience({ content }: HomeExperienceProps) {
           <p className="kicker">Developer Portfolio</p>
           <h1>
             <span className="hero-word">{content.profile.displayName}</span>
-            <span className="hero-word">builds</span>
-            <span className="inline-type-image" aria-hidden="true" />
-            <span className="hero-word">clear products.</span>
           </h1>
           <p className="headline reveal-copy">{content.profile.headline}</p>
           <p className="bio reveal-copy">{content.profile.bio}</p>
@@ -125,11 +119,20 @@ export function HomeExperience({ content }: HomeExperienceProps) {
             </a>
           </div>
         </div>
-        <aside className="hero-media motion-media" aria-label="포트폴리오 무드 이미지">
-          <div className="hero-media-image" />
+        <aside className="hero-media motion-media" aria-label="포트폴리오 요약">
           <div className="hero-media-caption">
-            <span>Focus</span>
+            <span>Focus Area</span>
             <strong>{content.profile.interests.slice(0, 3).join(' / ')}</strong>
+          </div>
+          <div className="hero-summary-list">
+            <section>
+              <span>Role</span>
+              <strong>Developer</strong>
+            </section>
+            <section>
+              <span>Work Style</span>
+              <strong>Structure first, product focused</strong>
+            </section>
           </div>
         </aside>
       </section>
@@ -149,7 +152,7 @@ export function HomeExperience({ content }: HomeExperienceProps) {
               <div
                 className="tile-image motion-media"
                 style={{
-                  backgroundImage: `url(https://picsum.photos/seed/${project.slug || projectImageSeeds[index % projectImageSeeds.length]}/1200/900)`
+                  backgroundImage: project.thumbnailUrl ? `url(${project.thumbnailUrl})` : undefined
                 }}
               />
               <div className="tile-content">
