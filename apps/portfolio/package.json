@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@skk/content-schema": "0.1.0",
+    "gsap": "^3.15.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
