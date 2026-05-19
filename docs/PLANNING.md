@@ -4,7 +4,9 @@
 
 개발자로서의 역량, 성장 과정, 프로젝트 경험을 신뢰감 있게 보여주는 개인 포트폴리오 사이트를 만든다. 데스크톱과 모바일에서 모두 읽기 쉬운 반응형 웹/앱으로 구성한다.
 
-단순 정적 포트폴리오가 아니라, 개인정보와 이력 정보를 한곳에서 관리하고 비공개 개발자 페이지에서 프로젝트와 수상 내역의 상세 게시글을 작성/수정할 수 있는 관리형 포트폴리오 앱을 목표로 한다.
+단순 정적 포트폴리오가 아니라, 개인정보와 이력 정보를 한곳에서 관리하고 로컬 전용 개발자 페이지에서 프로젝트와 수상 내역의 상세 게시글을 작성/수정할 수 있는 관리형 포트폴리오 앱을 목표로 한다.
+
+공개 배포 대상은 포트폴리오 사이트만이며, 관리자 페이지는 배포하지 않고 소유자 PC에서만 실행한다.
 
 ## 2. Target Visitors
 
@@ -96,7 +98,7 @@
 
 ## 5. Information Architecture
 
-공개 페이지와 비공개 개발자 페이지를 분리한다.
+공개 페이지와 로컬 전용 개발자 페이지를 분리한다.
 
 ### Public Site
 
@@ -123,25 +125,25 @@ Home
 /resume
 ```
 
-### Private Developer Page
+### Local Developer Page
 
-개발자 페이지는 소유자만 접근할 수 있는 관리 화면이다.
+개발자 페이지는 소유자 PC에서만 실행하는 로컬 전용 관리 화면이다. Netlify에는 배포하지 않는다.
 
 ```text
-/admin/login
-/admin
-/admin/profile
-/admin/education
-/admin/skills
-/admin/projects
-/admin/projects/new
-/admin/projects/[id]/edit
-/admin/awards
-/admin/awards/new
-/admin/awards/[id]/edit
-/admin/certifications
-/admin/links
-/admin/settings
+apps/admin
+├─ dashboard
+├─ profile
+├─ education
+├─ skills
+├─ projects
+├─ projects/new
+├─ projects/[id]/edit
+├─ awards
+├─ awards/new
+├─ awards/[id]/edit
+├─ certifications
+├─ links
+└─ settings
 ```
 
 관리 화면에서 수정 가능한 정보:
@@ -174,39 +176,49 @@ Home
 
 ## 8. Tech Stack Candidates
 
-관리자 페이지, 인증, 게시글 작성/수정이 필요하므로 정적 사이트보다 풀스택 웹 앱 구성이 적합하다.
+공개 사이트는 Next.js로 만들고 Netlify에 배포한다. 관리자 페이지는 배포하지 않는 로컬 전용 앱으로 만들며, `content/`의 JSON/Markdown 파일을 수정한다.
 
-### Option A: Next.js
+### Selected Direction
 
-- 장점: 공개 페이지와 관리자 페이지를 같은 프로젝트에서 관리하기 좋고, 라우팅/SEO/서버 기능/배포 생태계가 좋음
-- 단점: 단순 정적 포트폴리오보다 설계할 요소가 많음
+- 공개 사이트: Next.js
+- 배포: Netlify
+- 관리자 페이지: 로컬 전용 앱
+- 데이터 저장: JSON + Markdown 파일
+- 게시글 본문: Markdown
+- 인증: 배포하지 않으므로 운영 인증은 불필요. 필요하면 로컬 앱 실행 시 간단한 잠금 화면만 검토
 
-### Option B: Vite + React + Backend API
+### Repository Shape Draft
 
-- 장점: 프론트엔드 앱 구조가 명확하고 자유도가 높음
-- 단점: 인증, API 서버, SEO, 배포 구성을 별도로 설계해야 함
-
-### Option C: Astro
-
-- 장점: 공개 포트폴리오 성능이 좋고 콘텐츠 중심에 적합
-- 단점: 관리자 페이지와 인증/수정 흐름을 만들려면 별도 백엔드 또는 외부 CMS가 필요
-
-현재 추천 초안: Next.js.
-
-이유: 공개 포트폴리오, 상세 페이지, 관리자 페이지, 인증, 데이터 수정 흐름을 한 프로젝트에서 다루기 쉽다.
+```text
+skk_Portfolio/
+├─ apps/
+│  ├─ portfolio/     # Next.js 공개 포트폴리오, Netlify 배포 대상
+│  └─ admin/         # 로컬 전용 관리자 페이지, 배포 제외
+├─ content/
+│  ├─ profile.json
+│  ├─ education.json
+│  ├─ skills.json
+│  ├─ certifications.json
+│  ├─ links.json
+│  ├─ projects/
+│  │  └─ example-project.md
+│  └─ awards/
+│     └─ example-award.md
+├─ packages/
+│  └─ content-schema/ # 공개 사이트와 관리자 앱이 공유하는 타입/검증 로직
+└─ docs/
+```
 
 ## 9. Data Model Draft
 
-개인정보, 학력, 수상 내역, 자격증, 링크는 추후 쉽게 수정할 수 있도록 한곳에서 관리한다. 초기 구현에서는 데이터 모델을 명확히 분리하고, 실제 저장소는 기술 스택 결정 후 선택한다.
+개인정보, 학력, 수상 내역, 자격증, 링크는 추후 쉽게 수정할 수 있도록 `content/` 아래에서 한곳에 관리한다. 공개 사이트는 빌드 시 `content/` 파일을 읽어 정적 페이지를 생성하고, 로컬 관리자 앱은 같은 파일을 수정한다.
 
-저장 방식 후보:
+저장 방식:
 
-- 로컬 JSON/Markdown: 빠른 초기 구현에 적합하지만 배포 환경에서 관리자 페이지 수정 내용을 저장하기 어려움
-- SQLite + Prisma: 개인 포트폴리오 앱에 적합하고 로컬 개발이 쉬움
-- Supabase/PostgreSQL: 인증과 DB를 함께 쓰기 좋고 배포 후 관리가 쉬움
-- Headless CMS: 관리자 화면을 직접 만들 필요는 줄지만, 원하는 개발자 페이지 UX를 직접 통제하기 어려움
-
-현재 추천 초안: Next.js + Prisma + SQLite로 시작하고, 배포 단계에서 Supabase/PostgreSQL 전환을 검토한다.
+- 구조화 데이터: JSON
+- 프로젝트 상세 본문: Markdown with frontmatter
+- 수상 상세 본문: Markdown with frontmatter
+- 데이터 검증: Zod 등 schema 기반 검증을 구현 단계에서 검토
 
 ```ts
 type Profile = {
@@ -293,33 +305,31 @@ type Certification = {
 
 ## 10. Admin Requirements
 
-### Authentication
+### Local-Only Policy
 
-- 관리자 페이지는 소유자만 접근 가능해야 한다.
-- 초기 구현에서는 단일 관리자 계정을 전제로 한다.
-- 비밀번호, 세션 secret, OAuth secret 등은 `.env`로 관리하고 Git에 커밋하지 않는다.
-- 배포 전 인증 방식을 확정한다.
-
-인증 후보:
-
-- NextAuth/Auth.js Credentials Provider
-- Supabase Auth
-- Clerk
+- 관리자 페이지는 Netlify에 배포하지 않는다.
+- 관리자 앱은 로컬 개발 서버에서만 실행한다.
+- 공개 사이트 빌드 결과물에는 관리자 라우트와 관리자 코드를 포함하지 않는다.
+- 운영 인증 시스템은 만들지 않는다.
+- 로컬 PC 공유 상황이 있다면 관리자 앱에 간단한 로컬 잠금 화면을 추가할 수 있다.
 
 ### Content Editing
 
 - 프로필, 학력, 스킬, 자격증, 링크는 폼 기반으로 수정한다.
 - 프로젝트와 수상 내역은 목록 화면, 생성 화면, 수정 화면을 제공한다.
 - 프로젝트와 수상 내역은 긴 본문을 작성할 수 있어야 한다.
-- 본문 입력 방식은 Markdown 에디터를 우선 검토한다.
+- 본문 입력 방식은 Markdown 에디터로 한다.
 - 각 콘텐츠는 공개 여부와 정렬 순서를 설정할 수 있어야 한다.
+- 저장 시 JSON/Markdown 파일을 갱신한다.
+- 수정 후 Git diff로 변경 내용을 확인하고 커밋한다.
 
 ### Security Notes
 
-- 관리자 라우트는 서버 측에서 접근 제어한다.
-- 비공개 정보는 공개 API 응답에 포함하지 않는다.
+- 공개 사이트에는 관리자 화면을 배포하지 않는다.
+- 비공개 정보는 공개 빌드에 포함하지 않는다.
 - 공개 페이지는 `isPublic` 기준으로만 데이터를 조회한다.
-- 업로드 기능을 만들 경우 파일 크기, 확장자, 저장 위치를 별도 정책으로 정한다.
+- 공개 저장소에 올릴 수 없는 개인정보는 `content/`에 넣지 않는다.
+- 업로드 기능을 만들 경우 이미지 파일 크기, 확장자, 저장 위치를 별도 정책으로 정한다.
 
 ## 11. Planning Questions
 
@@ -332,20 +342,21 @@ type Certification = {
 - 대표 프로젝트 3개는 무엇인가?
 - 외부 공개 가능한 GitHub, 블로그, 이메일 링크가 있는가?
 - 원하는 톤은 미니멀, 터미널 스타일, 앱 대시보드 스타일, 인터랙티브 스타일 중 어디에 가까운가?
-- 관리자 로그인 방식은 이메일/비밀번호, GitHub 로그인, 별도 관리자 비밀번호 중 무엇을 선호하는가?
-- 상세 게시글 본문은 Markdown 방식으로 작성해도 되는가?
-- 배포 대상은 Vercel, 개인 서버, GitHub Pages 중 어디를 생각하는가?
+- 공개 사이트는 Netlify 배포로 확정.
+- 공개 사이트는 Next.js로 확정.
+- 상세 게시글 본문은 Markdown으로 확정.
+- 로컬 관리자 앱에도 잠금 화면이 필요한가?
 
 ## 12. Milestones
 
 1. 기획 문서 작성
 2. 콘텐츠 수집
 3. 기술 스택 확정
-4. 데이터 모델 확정
-5. 인증 및 관리자 페이지 설계
+4. 로컬 관리자 앱과 공개 사이트 구조 확정
+5. 콘텐츠 파일 구조와 데이터 모델 확정
 6. 와이어프레임 작성
 7. 기본 앱 구현
-8. 관리자 CRUD 구현
+8. 로컬 관리자 CRUD 구현
 9. 반응형 UI polish
 10. 콘텐츠 입력
-11. 배포 준비
+11. Netlify 배포 준비
